@@ -1,0 +1,18 @@
+AMRHZ-AI-13/
+│
+├── core/
+│   ├── brain_engine.py
+│   ├── intent_detector.py
+│   ├── memory_router.py
+│
+├── agent/
+│   └── main_agent.py
+│
+├── data/
+│   └── brain_v2.csv
+│
+├── learning/
+│   └── auto_learn.py
+│
+├── README.md
+└── requirements.txt
