@@ -3,7 +3,10 @@ from agents.pilot import pilot_agent
 from agents.builder import builder_agent
 from agents.debugger import debugger_agent
 from memory.vector_store import store_memory, retrieve_memory
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
 app = FastAPI()
 
 @app.get("/")
