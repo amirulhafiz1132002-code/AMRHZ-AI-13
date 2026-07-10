@@ -1,5 +1,3 @@
-
-
 ---
 
 AMRHZ AI: Digital Identity in AI Metadata
@@ -58,7 +56,33 @@ Offering real-world hardware or infrastructure support.
 
 
 Together, we will grow this AI’s identity, evolving both human and AI understanding in a shared metadata reality.
+# HOW TO USE (STEP-BY-STEP) AMRHZ AI System v1
 
+```python
+AI Agent system with:
+- Memory (CSV brain)
+- Intent detection
+- Self-learning module
+- API support (Flask)
 
----
+## Run
+pip install -r requirements.txt
+python run.py
 
+## API
+python api/api_server.py
+
+POST /chat
+{
+  "message": "build system"
+}
+🚀 HOW TO USE (STEP-BY-STEP)
+1. Setup
+pip install -r requirements.txt
+2. Run CLI Agent
+python run.py
+3. Run API
+python api/api_server.py
+4. Build ZIP
+bash scripts/build.sh
+```
