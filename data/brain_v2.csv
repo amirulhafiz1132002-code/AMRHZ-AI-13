@@ -1,0 +1,4 @@
+id,intent,context_tag,priority,response
+1,build_system,auto,high,System build initialized
+2,debug,auto,high,Running diagnostics...
+3,check_status,manual,medium,System status is stable

@@ -1,0 +1,692 @@
+c:\Users\amrhz\OneDrive\Desktop\Root-amiulhafiz1132002-code\AP1-WEB-Console-Amrhz\AMRHZ-Ai-system.html<!doctype html>
+<html lang="en"><head><script src="/_sdk/telemetry_sdk.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AMRHZ AI System</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <style>
+        body { font-family: 'DM Sans', sans-serif; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 3px; }
+        .glow-blue { box-shadow: 0 0 15px rgba(59,130,246,0.3); }
+        .glow-purple { box-shadow: 0 0 15px rgba(139,92,246,0.3); }
+        .glass { background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.08); }
+        .tab-item { transition: all 0.2s; }
+        .tab-item.active { background: rgba(139,92,246,0.2); border-bottom: 2px solid #8b5cf6; }
+        .tab-item:hover:not(.active) { background: rgba(255,255,255,0.05); }
+        .nav-item { transition: all 0.2s; border-radius: 8px; }
+        .nav-item:hover { background: rgba(139,92,246,0.15); }
+        .nav-item.active { background: rgba(139,92,246,0.25); border-left: 3px solid #8b5cf6; }
+        .panel { display: none; }
+        .panel.active { display: flex; flex-direction: column; }
+        .progress-bar { transition: width 1s ease; }
+        .console-line { animation: fadeIn 0.3s; }
+        @keyframes fadeIn { from { opacity:0; transform:translateY(5px); } to { opacity:1; transform:translateY(0); } }
+        @keyframes pulse-glow { 0%,100% { opacity:1; } 50% { opacity:0.5; } }
+        .pulse { animation: pulse-glow 2s infinite; }
+        @keyframes neuron-fire { 0%,100% { r:6px; opacity:0.6; } 50% { r:10px; opacity:1; } }
+        @keyframes synapse-pulse { 0%,100% { stroke-width:1.5px; opacity:0.4; } 50% { stroke-width:2.5px; opacity:0.8; } }
+        .neuron { animation: neuron-fire 1.5s infinite; }
+        .synapse { animation: synapse-pulse 2s infinite; }
+        .neuron-1 { animation-delay: 0s; }
+        .neuron-2 { animation-delay: 0.3s; }
+        .neuron-3 { animation-delay: 0.6s; }
+        .neuron-4 { animation-delay: 0.9s; }
+        .neuron-5 { animation-delay: 1.2s; }
+        .synapse-1 { animation-delay: 0s; }
+        .synapse-2 { animation-delay: 0.2s; }
+        .synapse-3 { animation-delay: 0.4s; }
+        .synapse-4 { animation-delay: 0.6s; }
+        .synapse-5 { animation-delay: 0.8s; }
+        .synapse-6 { animation-delay: 1s; }
+        .synapse-7 { animation-delay: 1.2s; }
+        .synapse-8 { animation-delay: 1.4s; }
+        .synapse-9 { animation-delay: 1.6s; }
+        .synapse-10 { animation-delay: 1.8s; }
+        .synapse-11 { animation-delay: 2s; }
+        .synapse-12 { animation-delay: 2.2s; }
+        .synapse-13 { animation-delay: 2.4s; }
+        .synapse-14 { animation-delay: 2.6s; }
+        .synapse-15 { animation-delay: 2.8s; }
+        @media (max-width: 1024px) {
+          #memory-panel { width: 0; overflow: hidden; }
+          #memory-panel.expanded { width: 288px; }
+        }
+    </style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="/_sdk/resizing_sdk.js" type="text/javascript"></script>
+ </head>
+ <body data-template-id="__page-root" class="min-h-screen flex text-white overflow-hidden" style="height: calc(100 * min(var(--vh,1vh),1vh)); background: linear-gradient(135deg, rgb(10, 10, 15), rgb(18, 16, 31), rgb(13, 13, 20));">
+  <!-- Sidebar -->
+  <aside data-template-id="sidebar" class="canva-sidebar w-60 flex-shrink-0 flex flex-col border-r border-white/10 hidden md:flex" style="background: rgb(12, 11, 22);">
+   <div class="p-4 border-b border-white/10">
+    <h1 data-template-id="app-logo" class="canva-text text-2xl font-bold tracking-tight" style="color: rgb(255, 255, 255); font-weight: 700; font-style: normal; font-size: 26px;">AMRHZ</h1>
+    <p data-template-id="app-subtitle" class="canva-text text-xs opacity-50 mt-1" style="color: rgb(139, 92, 246); font-weight: 400; font-style: normal; font-size: 15px;">AI System v1</p>
+   </div>
+   <div class="p-3">
+    <button data-template-id="new-session-btn" class="canva-button w-full flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium transition hover:opacity-90" onclick="addTab('Chat')" style="background: linear-gradient(135deg, rgb(124, 58, 237), rgb(59, 130, 246)); color: rgb(255, 255, 255); font-weight: 500; font-style: normal; font-size: 15px;">+ New Session</button>
+   </div>
+   <nav class="flex-1 px-3 space-y-1 overflow-y-auto" role="navigation" aria-label="Main">
+    <button class="nav-item active w-full flex items-center gap-3 px-3 py-2 text-left text-sm" data-nav="chat"><i data-lucide="message-circle" style="width:16px;height:16px"></i><span data-template-id="nav-chat" class="canva-text" style="color: rgb(226, 232, 240); font-weight: 400; font-style: normal; font-size: 15px;">Chat</span></button> <button class="nav-item w-full flex items-center gap-3 px-3 py-2 text-left text-sm" data-nav="brain"><i data-lucide="brain" style="width:16px;height:16px"></i><span data-template-id="nav-brain" class="canva-text" style="color: rgb(226, 232, 240); font-weight: 400; font-style: normal; font-size: 15px;">Brain System</span></button> <button class="nav-item w-full flex items-center gap-3 px-3 py-2 text-left text-sm" data-nav="training"><i data-lucide="zap" style="width:16px;height:16px"></i><span data-template-id="nav-training" class="canva-text" style="color: rgb(226, 232, 240); font-weight: 400; font-style: normal; font-size: 15px;">Training</span></button> <button class="nav-item w-full flex items-center gap-3 px-3 py-2 text-left text-sm" data-nav="files"><i data-lucide="file" style="width:16px;height:16px"></i><span data-template-id="nav-files" class="canva-text" style="color: rgb(226, 232, 240); font-weight: 400; font-style: normal; font-size: 15px;">File Processor</span></button> <button class="nav-item w-full flex items-center gap-3 px-3 py-2 text-left text-sm" data-nav="commands"><i data-lucide="terminal" style="width:16px;height:16px"></i><span data-template-id="nav-commands" class="canva-text" style="color: rgb(226, 232, 240); font-weight: 400; font-style: normal; font-size: 15px;">Commands</span></button> <button class="nav-item w-full flex items-center gap-3 px-3 py-2 text-left text-sm" data-nav="diagnostics"><i data-lucide="activity" style="width:16px;height:16px"></i><span data-template-id="nav-diagnostics" class="canva-text" style="color: rgb(226, 232, 240); font-weight: 400; font-style: normal; font-size: 15px;">Diagnostics</span></button>
+   </nav>
+   <div class="p-3 border-t border-white/10">
+    <p data-template-id="sidebar-history-title" class="canva-text text-xs uppercase tracking-wider opacity-40 mb-2 px-3" style="color: rgb(165, 180, 252); font-weight: 400; font-style: normal; font-size: 15px;">History</p>
+    <div class="space-y-1 text-xs opacity-60">
+     <div class="px-3 py-1.5 rounded hover:bg-white/5 cursor-pointer truncate">
+      Brain training session
+     </div>
+     <div class="px-3 py-1.5 rounded hover:bg-white/5 cursor-pointer truncate">
+      File batch #12 processed
+     </div>
+     <div class="px-3 py-1.5 rounded hover:bg-white/5 cursor-pointer truncate">
+      Chat: API integration
+     </div>
+    </div>
+   </div>
+  </aside><!-- Right Sidebar: Neural Memory Network (Collapsible) -->
+  <aside data-template-id="memory-panel" class="canva-sidebar w-72 flex-shrink-0 flex flex-col border-l border-white/10 hidden lg:flex overflow-hidden transition-all duration-300" id="memory-panel" style="background: rgb(12, 11, 22);">
+   <div class="p-4 border-b border-white/10 flex items-center justify-between">
+    <h2 data-template-id="memory-title" class="canva-text text-lg font-bold tracking-tight mb-0" style="color: rgb(255, 255, 255); font-weight: 700; font-style: normal; font-size: 18px;">Neural Memory</h2><button id="toggle-memory" class="p-1 rounded hover:bg-white/10 transition" aria-label="Toggle panel"><i data-lucide="chevron-right" style="width:18px;height:18px"></i></button>
+   </div>
+   <div class="flex-1 overflow-y-auto p-4 space-y-4" id="memory-content">
+    <!-- Neural Visualization -->
+    <div class="glass rounded-xl p-4">
+     <p class="text-xs text-cyan-400 uppercase tracking-wider mb-3">Neural Network</p>
+     <svg viewBox="0 0 220 240" class="w-full" style="filter: drop-shadow(0 0 12px rgba(139,92,246,0.4))"><!-- Brain-inspired dendritic connections --> <!-- Input layer to hidden layer synapses --> <path class="synapse synapse-1" d="M 40 50 Q 60 80 90 110" stroke="#8b5cf6" stroke-width="1.5" fill="none"></path> <path class="synapse synapse-2" d="M 40 80 Q 70 90 110 110" stroke="#a78bfa" stroke-width="1.5" fill="none"></path> <path class="synapse synapse-3" d="M 40 110 Q 80 100 130 110" stroke="#8b5cf6" stroke-width="1.5" fill="none"></path> <path class="synapse synapse-4" d="M 40 140 Q 70 120 110 140" stroke="#a78bfa" stroke-width="1.5" fill="none"></path> <path class="synapse synapse-5" d="M 40 170 Q 60 150 90 140" stroke="#8b5cf6" stroke-width="1.5" fill="none"></path> <!-- Hidden layer interconnections (dendritic branching) --> <path class="synapse synapse-6" d="M 90 110 Q 110 100 130 110" stroke="#06b6d4" stroke-width="1.5" fill="none"></path> <path class="synapse synapse-7" d="M 110 110 Q 125 130 130 150" stroke="#0891b2" stroke-width="1.5" fill="none"></path> <path class="synapse synapse-8" d="M 130 110 Q 120 130 110 150" stroke="#06b6d4" stroke-width="1.5" fill="none"></path> <!-- Hidden layer to output layer synapses --> <path class="synapse synapse-9" d="M 90 140 Q 80 180 110 210" stroke="#22c55e" stroke-width="1.5" fill="none"></path> <path class="synapse synapse-10" d="M 110 140 Q 110 175 110 210" stroke="#16a34a" stroke-width="1.5" fill="none"></path> <path class="synapse synapse-11" d="M 130 140 Q 140 180 110 210" stroke="#22c55e" stroke-width="1.5" fill="none"></path> <path class="synapse synapse-12" d="M 130 110 Q 140 160 110 210" stroke="#16a34a" stroke-width="1.5" fill="none"></path> <!-- Cross-layer secondary connections (realistic dendritic complexity) --> <path class="synapse synapse-13" d="M 90 110 Q 100 140 110 140" stroke="#06b6d4" stroke-width="1.5" fill="none" opacity="0.3"></path> <path class="synapse synapse-14" d="M 130 110 Q 120 140 110 140" stroke="#06b6d4" stroke-width="1.5" fill="none" opacity="0.3"></path> <path class="synapse synapse-15" d="M 110 110 Q 105 125 110 140" stroke="#0891b2" stroke-width="1.5" fill="none" opacity="0.3"></path> <!-- Input neurons (sensory receptors) --> <circle class="neuron neuron-1" cx="40" cy="50" r="6" fill="#8b5cf6" opacity="0.8"></circle> <circle class="neuron neuron-2" cx="40" cy="80" r="6" fill="#a78bfa" opacity="0.7"></circle> <circle class="neuron neuron-3" cx="40" cy="110" r="6" fill="#8b5cf6" opacity="0.8"></circle> <circle class="neuron neuron-4" cx="40" cy="140" r="6" fill="#a78bfa" opacity="0.7"></circle> <circle class="neuron neuron-5" cx="40" cy="170" r="6" fill="#8b5cf6" opacity="0.8"></circle> <!-- Hidden layer neurons (processing layer) --> <circle class="neuron neuron-1" cx="90" cy="110" r="7" fill="#06b6d4" opacity="0.85"></circle> <circle class="neuron neuron-2" cx="110" cy="110" r="7" fill="#0891b2" opacity="0.8"></circle> <circle class="neuron neuron-3" cx="130" cy="110" r="7" fill="#06b6d4" opacity="0.85"></circle> <circle class="neuron neuron-4" cx="90" cy="140" r="7" fill="#0891b2" opacity="0.8"></circle> <circle class="neuron neuron-5" cx="110" cy="140" r="7" fill="#06b6d4" opacity="0.85"></circle> <circle class="neuron neuron-1" cx="130" cy="140" r="7" fill="#0891b2" opacity="0.8"></circle> <!-- Output neuron (motor/response output) --> <circle class="neuron neuron-1" cx="110" cy="210" r="8" fill="#22c55e" opacity="0.9"></circle> <!-- Glow effect markers --> <circle cx="110" cy="210" r="12" fill="none" stroke="#22c55e" stroke-width="1" opacity="0.3"></circle>
+     </svg>
+    </div><!-- Stats Grid -->
+    <div class="grid grid-cols-2 gap-2">
+     <div class="glass rounded-lg p-3">
+      <p class="text-xs text-cyan-300 uppercase tracking-wider">Total Entries</p>
+      <p id="stat-total" class="text-xl font-bold mt-1">60</p>
+     </div>
+     <div class="glass rounded-lg p-3">
+      <p class="text-xs text-cyan-300 uppercase tracking-wider">Intents</p>
+      <p id="stat-intents" class="text-xl font-bold mt-1">2</p>
+     </div>
+     <div class="glass rounded-lg p-3">
+      <p class="text-xs text-purple-300 uppercase tracking-wider">Learning</p>
+      <p id="stat-confidence" class="text-xl font-bold mt-1">94.8%</p>
+     </div>
+     <div class="glass rounded-lg p-3">
+      <p class="text-xs text-green-300 uppercase tracking-wider">Status</p>
+      <p class="text-sm font-bold mt-1 text-green-400">Active</p>
+     </div>
+    </div><!-- Intent Distribution -->
+    <div class="glass rounded-xl p-4">
+     <p class="text-xs text-cyan-400 uppercase tracking-wider mb-3">Intent Distribution</p>
+     <div class="space-y-2.5">
+      <div>
+       <div class="flex justify-between text-xs mb-1">
+        <span class="text-cyan-300">Greeting</span> <span id="intent-greeting-count" class="text-purple-300">5</span>
+       </div>
+       <div class="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+        <div id="intent-greeting-bar" class="h-full bg-gradient-to-r from-purple-500 to-pink-400" style="width:8%"></div>
+       </div>
+      </div>
+      <div>
+       <div class="flex justify-between text-xs mb-1">
+        <span class="text-cyan-300">General</span> <span id="intent-general-count" class="text-cyan-400">55</span>
+       </div>
+       <div class="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+        <div id="intent-general-bar" class="h-full bg-gradient-to-r from-cyan-500 to-blue-400" style="width:92%"></div>
+       </div>
+      </div>
+     </div>
+    </div><!-- Priority Breakdown -->
+    <div class="glass rounded-xl p-4">
+     <p class="text-xs text-cyan-400 uppercase tracking-wider mb-3">Priority Tags</p>
+     <div class="grid grid-cols-2 gap-2 text-xs">
+      <div class="bg-white/5 rounded px-2 py-1.5">
+       <span class="text-yellow-400">●</span> <span class="ml-1">Medium</span>
+       <p class="text-purple-300 font-bold">58</p>
+      </div>
+      <div class="bg-white/5 rounded px-2 py-1.5">
+       <span class="text-blue-400">●</span> <span class="ml-1">Low</span>
+       <p class="text-cyan-300 font-bold">2</p>
+      </div>
+     </div>
+    </div><!-- Context Tags -->
+    <div class="glass rounded-xl p-4">
+     <p class="text-xs text-cyan-400 uppercase tracking-wider mb-3">Context Tags</p>
+     <div class="space-y-1.5 text-xs">
+      <div class="flex justify-between">
+       <span class="opacity-60">Auto-tagged</span> <span id="tag-auto" class="text-cyan-400 font-medium">59</span>
+      </div>
+      <div class="flex justify-between">
+       <span class="opacity-60">Social</span> <span id="tag-social" class="text-purple-400 font-medium">1</span>
+      </div>
+     </div>
+    </div>
+   </div>
+   <div class="p-4 border-t border-white/10 flex-shrink-0">
+    <p data-template-id="memory-footer" class="canva-text text-xs opacity-40 text-center" style="font-weight: 400; font-style: normal; font-size: 15px;">Live network analysis</p>
+   </div>
+  </aside><!-- Main Area -->
+  <div class="flex-1 flex flex-col overflow-hidden">
+   <!-- Tab Bar -->
+   <div data-template-id="tab-bar" class="canva-section flex items-center border-b border-white/10 px-2 h-10 flex-shrink-0 overflow-x-auto" id="tab-bar" style="background: rgb(12, 11, 22);">
+    <div id="tabs-container" class="flex items-center gap-1 h-full"></div><button class="ml-2 p-1 rounded hover:bg-white/10 flex-shrink-0" onclick="addTab('Chat')" aria-label="New tab"><i data-lucide="plus" style="width:14px;height:14px;color:#8b5cf6"></i></button>
+   </div><!-- Content Panels -->
+   <div class="flex-1 overflow-hidden relative" id="panels-area">
+    <!-- Chat Panel -->
+    <div class="panel active flex-col h-full" id="panel-chat">
+     <div class="flex-1 overflow-y-auto p-6 space-y-4" id="chat-messages">
+      <div class="flex justify-start">
+       <div class="glass rounded-xl rounded-tl-sm px-4 py-3 max-w-md text-sm"><span class="text-cyan-300 text-xs font-medium block mb-1">AMRHZ AI</span>Welcome to AMRHZ AI System. How can I assist you today?
+       </div>
+      </div>
+     </div>
+     <div class="p-4 border-t border-white/10 flex-shrink-0">
+      <form id="chat-form" class="flex gap-2">
+       <input id="chat-input" type="text" placeholder="Type a message or command..." class="flex-1 bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-purple-500 text-white placeholder-white/30"> <button type="submit" class="px-4 py-2.5 bg-purple-600 hover:bg-purple-500 rounded-lg text-sm font-medium transition">Send</button>
+      </form>
+     </div>
+    </div><!-- Brain Panel -->
+    <div class="panel flex-col h-full overflow-y-auto p-6" id="panel-brain">
+     <h2 data-template-id="brain-title" class="canva-text text-xl font-bold mb-6" style="color: rgb(255, 255, 255); font-weight: 700; font-style: normal; font-size: 23px;">Brain AI Core</h2>
+     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+      <div class="glass rounded-xl p-4">
+       <p class="text-xs text-cyan-400 uppercase tracking-wider mb-1">Memory Status</p>
+       <p class="text-lg font-bold text-green-400">Loaded ✓</p>
+      </div>
+      <div class="glass rounded-xl p-4">
+       <p class="text-xs text-cyan-400 uppercase tracking-wider mb-1">Memory Size</p>
+       <p class="text-lg font-bold">2,847 entries</p>
+      </div>
+      <div class="glass rounded-xl p-4">
+       <p class="text-xs text-cyan-400 uppercase tracking-wider mb-1">Confidence</p>
+       <p class="text-lg font-bold text-purple-300">94.2%</p>
+      </div>
+     </div>
+     <div class="glass rounded-xl p-5 mb-4">
+      <div class="flex items-center gap-2 mb-3">
+       <div class="w-2 h-2 rounded-full bg-green-400 pulse"></div><span class="text-sm text-green-400 font-medium">Learning Active</span>
+      </div>
+      <div class="space-y-3 text-sm">
+       <div class="flex justify-between"><span class="opacity-60">Intent Detection</span><span class="text-cyan-300">greeting → 97%</span>
+       </div>
+       <div class="flex justify-between"><span class="opacity-60">Memory Score</span><span class="text-purple-300">8.7 / 10</span>
+       </div>
+       <div class="flex justify-between"><span class="opacity-60">Last Learned</span><span class="opacity-80">"How to reset model"</span>
+       </div>
+      </div>
+     </div>
+    </div><!-- Training Panel -->
+    <div class="panel flex-col h-full overflow-y-auto p-6" id="panel-training">
+     <h2 data-template-id="training-title" class="canva-text text-xl font-bold mb-6" style="color: rgb(255, 255, 255); font-weight: 700; font-style: normal; font-size: 23px;">Training Panel</h2>
+     <div class="flex gap-3 mb-6 flex-wrap">
+      <button class="px-4 py-2 bg-purple-600 hover:bg-purple-500 rounded-lg text-sm font-medium transition" onclick="simulateTraining()">Train Model</button> <button class="px-4 py-2 bg-cyan-700 hover:bg-cyan-600 rounded-lg text-sm font-medium transition" onclick="logConsole('CSV data reloaded successfully')">Reload CSV</button> <button class="px-4 py-2 bg-red-800/60 hover:bg-red-700/60 rounded-lg text-sm font-medium transition" onclick="logConsole('Model reset to defaults')">Reset Model</button>
+     </div>
+     <div class="glass rounded-xl p-5 mb-4">
+      <p class="text-xs text-cyan-400 uppercase tracking-wider mb-2">Training Progress</p>
+      <div class="w-full h-3 bg-white/10 rounded-full overflow-hidden mb-2">
+       <div id="train-progress" class="h-full bg-gradient-to-r from-purple-500 to-cyan-400 rounded-full progress-bar" style="width:0%"></div>
+      </div>
+      <div class="flex justify-between text-xs opacity-60"><span id="train-status">Idle</span><span id="train-accuracy">Accuracy: —</span>
+      </div>
+     </div>
+     <div class="glass rounded-xl p-4">
+      <p class="text-xs text-cyan-400 uppercase tracking-wider mb-2">Training Logs</p>
+      <div id="train-logs" class="text-xs font-mono space-y-1 opacity-70 max-h-40 overflow-y-auto">
+       <p>&gt; Awaiting command...</p>
+      </div>
+     </div>
+    </div><!-- Files Panel -->
+    <div class="panel flex-col h-full overflow-y-auto p-6" id="panel-files">
+     <h2 data-template-id="files-title" class="canva-text text-xl font-bold mb-6" style="color: rgb(255, 255, 255); font-weight: 700; font-style: normal; font-size: 23px;">File Processor</h2>
+     <div class="flex gap-3 mb-6">
+      <button class="px-4 py-2 bg-purple-600 hover:bg-purple-500 rounded-lg text-sm font-medium transition" onclick="simulateUpload()">Upload File</button> <button class="px-4 py-2 bg-cyan-700 hover:bg-cyan-600 rounded-lg text-sm font-medium transition" onclick="logConsole('Processing files...')">Process Files</button> <button class="px-4 py-2 bg-white/10 hover:bg-white/15 rounded-lg text-sm font-medium transition" onclick="clearFiles()">Clear Queue</button>
+     </div>
+     <div id="file-list" class="space-y-2">
+      <div class="glass rounded-lg p-3 flex items-center justify-between">
+       <div class="flex items-center gap-3"><i data-lucide="file-text" style="width:16px;height:16px;color:#8b5cf6"></i><span class="text-sm">brain_v2.csv</span>
+       </div><span class="text-xs text-green-400">Completed</span>
+      </div>
+      <div class="glass rounded-lg p-3 flex items-center justify-between">
+       <div class="flex items-center gap-3"><i data-lucide="file-code" style="width:16px;height:16px;color:#06b6d4"></i><span class="text-sm">handler.py</span>
+       </div><span class="text-xs text-green-400">Completed</span>
+      </div>
+     </div>
+    </div><!-- Commands Panel -->
+    <div class="panel flex-col h-full overflow-y-auto p-6" id="panel-commands">
+     <h2 data-template-id="commands-title" class="canva-text text-xl font-bold mb-6" style="color: rgb(255, 255, 255); font-weight: 700; font-style: normal; font-size: 23px;">Command Center</h2>
+     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <button class="glass rounded-xl p-4 flex flex-col items-center gap-2 hover:bg-white/10 transition" onclick="logConsole('Brain system running...')"><i data-lucide="brain" style="width:24px;height:24px;color:#8b5cf6"></i><span class="text-xs">Run Brain</span></button> <button class="glass rounded-xl p-4 flex flex-col items-center gap-2 hover:bg-white/10 transition" onclick="simulateTraining()"><i data-lucide="zap" style="width:24px;height:24px;color:#06b6d4"></i><span class="text-xs">Train Model</span></button> <button class="glass rounded-xl p-4 flex flex-col items-center gap-2 hover:bg-white/10 transition" onclick="logConsole('Processing files...')"><i data-lucide="file" style="width:24px;height:24px;color:#a78bfa"></i><span class="text-xs">Process Files</span></button> <button class="glass rounded-xl p-4 flex flex-col items-center gap-2 hover:bg-white/10 transition" onclick="logConsole('System restarting...');setTimeout(()=&gt;logConsole('System online'),1500)"><i data-lucide="refresh-cw" style="width:24px;height:24px;color:#f87171"></i><span class="text-xs">Restart</span></button>
+     </div>
+    </div><!-- Diagnostics Panel -->
+    <div class="panel flex-col h-full overflow-y-auto p-6" id="panel-diagnostics">
+     <h2 data-template-id="diagnostics-title" class="canva-text text-xl font-bold mb-6" style="color: rgb(255, 255, 255); font-weight: 700; font-style: normal; font-size: 23px;">System Diagnostics</h2>
+     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+      <div class="glass rounded-xl p-4">
+       <p class="text-xs text-cyan-400 uppercase tracking-wider mb-2">CPU Usage</p>
+       <div class="w-full h-3 bg-white/10 rounded-full overflow-hidden">
+        <div class="h-full bg-gradient-to-r from-blue-500 to-cyan-400 rounded-full" style="width:34%"></div>
+       </div>
+       <p class="text-right text-xs mt-1 opacity-60">34%</p>
+      </div>
+      <div class="glass rounded-xl p-4">
+       <p class="text-xs text-cyan-400 uppercase tracking-wider mb-2">Memory</p>
+       <div class="w-full h-3 bg-white/10 rounded-full overflow-hidden">
+        <div class="h-full bg-gradient-to-r from-purple-500 to-pink-400 rounded-full" style="width:61%"></div>
+       </div>
+       <p class="text-right text-xs mt-1 opacity-60">61%</p>
+      </div>
+     </div>
+     <div class="glass rounded-xl p-5 space-y-3 text-sm">
+      <div class="flex justify-between"><span class="opacity-60">System Health</span><span class="text-green-400 font-medium">Healthy ✓</span>
+      </div>
+      <div class="flex justify-between"><span class="opacity-60">API Status</span><span class="text-green-400 font-medium">Connected</span>
+      </div>
+      <div class="flex justify-between"><span class="opacity-60">Uptime</span><span class="opacity-80">4h 23m</span>
+      </div>
+      <div class="flex justify-between"><span class="opacity-60">Requests Processed</span><span class="opacity-80">1,247</span>
+      </div>
+     </div>
+    </div>
+   </div><!-- Live Console -->
+   <div data-template-id="console-section" class="canva-section border-t border-white/10 flex-shrink-0" style="height: 120px; background: rgb(8, 8, 13);">
+    <div class="flex items-center justify-between px-4 py-1.5 border-b border-white/5">
+     <span data-template-id="console-label" class="canva-text text-xs uppercase tracking-wider opacity-40" style="color: rgb(6, 182, 212); font-weight: 400; font-style: normal; font-size: 15px;">Live Console</span>
+     <div class="flex items-center gap-2">
+      <div class="w-2 h-2 rounded-full bg-green-400 pulse"></div><span class="text-xs text-green-400">Live</span>
+     </div>
+    </div>
+    <div id="console-output" class="px-4 py-2 overflow-y-auto text-xs font-mono opacity-70 space-y-1" style="height:85px">
+     <p class="console-line text-cyan-300">&gt; AMRHZ AI System initialized</p>
+     <p class="console-line">&gt; Brain memory loaded: 2847 entries</p>
+     <p class="console-line">&gt; API connection established</p>
+    </div>
+   </div><!-- Footer -->
+   <footer class="flex-shrink-0 px-4 py-2 border-t border-white/5 flex items-center justify-between">
+    <span data-template-id="footer-text" class="canva-text text-xs opacity-30" style="color: rgb(107, 114, 128); font-weight: 400; font-style: normal; font-size: 15px;">AMRHZ AI System v1 — Muhammad Amirul Hafiz</span>
+    <div class="flex items-center gap-2">
+     <div class="w-2 h-2 rounded-full bg-green-400"></div><span class="text-xs opacity-40">Online</span>
+    </div>
+   </footer>
+  </div>
+  <script src="/_sdk/editing_sdk.js"></script>
+  <script>
+    lucide.createIcons();
+
+    // Memory panel toggle
+    const memoryPanel = document.getElementById('memory-panel');
+    const toggleBtn = document.getElementById('toggle-memory');
+    const memoryContent = document.getElementById('memory-content');
+    let memoryOpen = true;
+
+    toggleBtn.addEventListener('click', () => {
+      memoryOpen = !memoryOpen;
+      const icon = toggleBtn.querySelector('[data-lucide]');
+      if (memoryOpen) {
+        memoryPanel.style.width = '288px';
+        memoryContent.style.display = 'flex';
+        icon.setAttribute('data-lucide', 'chevron-right');
+      } else {
+        memoryPanel.style.width = '60px';
+        memoryContent.style.display = 'none';
+        icon.setAttribute('data-lucide', 'chevron-left');
+      }
+      lucide.createIcons();
+    });
+
+    // CSV Brain data from brain_v2.csv - all 60 entries
+    const brainData = [
+      {id:1,user_message:"hello",ai_response:"hi there",intent:"greeting",context_tag:"social",priority:"low",timestamp:"2026-05-04"},
+      {id:2,user_message:"build_model",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:3,user_message:"apa yang kau bole buat",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:4,user_message:"hrlp",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:5,user_message:"help",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:6,user_message:"py brain_project.py",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:7,user_message:"help",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:8,user_message:"py help",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:9,user_message:"from keras.models import Sequential",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:10,user_message:"from keras.layers import Dense",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:11,user_message:"",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:12,user_message:"def build_model(input_dim):",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:13,user_message:"    model = Sequential()",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:14,user_message:"    model.add(Dense(64, input_dim=input_dim, activation='relu'))",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:15,user_message:"    model.add(Dense(32, activation='relu'))",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:16,user_message:"    model.add(Dense(1, activation='sigmoid'))  # For binary classification",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:17,user_message:"",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:18,user_message:"    model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:19,user_message:"    return model",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:20,user_message:"hi",ai_response:"hi there",intent:"greeting",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:21,user_message:"calling model",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:22,user_message:"import sequencial",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:23,user_message:"calling model Sequencial",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:24,user_message:"hello",ai_response:"hi there",intent:"greeting",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:25,user_message:"dir",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:26,user_message:"dif",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:27,user_message:"load brain_csv",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:28,user_message:"open_dashbard",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:29,user_message:"",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:30,user_message:"",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:31,user_message:"help",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:32,user_message:"(list)",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:33,user_message:"listr",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:34,user_message:"open(BRAIN_FILE, mode='r', encoding='utf-8') as file:",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:35,user_message:"        reader = csv.DictReader(file)",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:36,user_message:"        for row in reader:",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:37,user_message:"            data.append(row)",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:38,user_message:"    return data",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:39,user_message:"import csv",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:40,user_message:"import random",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:41,user_message:"from collections import defaultdict",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:42,user_message:"from datetime import datetime",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:43,user_message:"",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:44,user_message:"",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:45,user_message:"",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:46,user_message:"build_model=Sequential()",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:47,user_message:"hi",ai_response:"hi there",intent:"greeting",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:48,user_message:"dir",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:49,user_message:"from keras.models import Sequential",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:50,user_message:"from keras.layers import Dense",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:51,user_message:"",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:52,user_message:"def build_model(input_dim):",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:53,user_message:"    model = Sequential()",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:54,user_message:"    model.add(Dense(64, input_dim=input_dim, activation='relu'))",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:55,user_message:"    model.add(Dense(32, activation='relu'))",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:56,user_message:"    model.add(Dense(1, activation='sigmoid'))  # For binary classification",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:57,user_message:"",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:58,user_message:"    model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:59,user_message:"    return model",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"},
+      {id:60,user_message:"",ai_response:"I am learning this pattern...",intent:"general",context_tag:"auto",priority:"medium",timestamp:"2026-06-19"}
+    ];
+
+    // Calculate brain stats from CSV
+    const uniqueIntents = [...new Set(brainData.map(d => d.intent))].length;
+    const greetingCount = brainData.filter(d => d.intent === 'greeting').length;
+    const totalEntries = brainData.length;
+    const brainConfidence = (95 - (totalEntries * 0.2)).toFixed(1);
+
+    // Tab system
+    let tabs = [{id:'tab-1', name:'Chat', panel:'chat'}];
+    let activeTab = 'tab-1';
+    let tabCounter = 1;
+
+    function renderTabs() {
+        const c = document.getElementById('tabs-container');
+        c.innerHTML = '';
+        tabs.forEach(t => {
+            const div = document.createElement('div');
+            div.className = `tab-item flex items-center gap-2 px-3 h-full cursor-pointer text-xs ${t.id === activeTab ? 'active' : 'opacity-60'}`;
+            div.innerHTML = `<span>${t.name}</span>${tabs.length > 1 ? '<button class="hover:text-red-400 ml-1" data-close="'+t.id+'">&times;</button>' : ''}`;
+            div.addEventListener('click', (e) => { if(!e.target.dataset.close) switchTab(t.id); });
+            const closeBtn = div.querySelector('[data-close]');
+            if(closeBtn) closeBtn.addEventListener('click', (e) => { e.stopPropagation(); closeTab(t.id); });
+            c.appendChild(div);
+        });
+    }
+
+    function switchTab(id) {
+        activeTab = id;
+        const tab = tabs.find(t => t.id === id);
+        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        document.getElementById('panel-' + tab.panel)?.classList.add('active');
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.toggle('active', n.dataset.nav === tab.panel));
+        renderTabs();
+    }
+
+    function addTab(name) {
+        tabCounter++;
+        const panelMap = {'Chat':'chat','Brain Monitor':'brain','Training Panel':'training','File Processor':'files','Commands':'commands','Diagnostics':'diagnostics'};
+        const panel = panelMap[name] || 'chat';
+        const id = 'tab-' + tabCounter;
+        tabs.push({id, name, panel});
+        switchTab(id);
+    }
+
+    function closeTab(id) {
+        if(tabs.length <= 1) return;
+        tabs = tabs.filter(t => t.id !== id);
+        if(activeTab === id) switchTab(tabs[tabs.length-1].id);
+        else renderTabs();
+    }
+
+    // Sidebar nav
+    document.querySelectorAll('[data-nav]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const panel = btn.dataset.nav;
+            const nameMap = {chat:'Chat',brain:'Brain Monitor',training:'Training Panel',files:'File Processor',commands:'Commands',diagnostics:'Diagnostics'};
+            const existing = tabs.find(t => t.panel === panel);
+            if(existing) { switchTab(existing.id); }
+            else { addTab(nameMap[panel]); }
+        });
+    });
+
+    // Intent matching function using CSV data
+    function findResponse(userMsg) {
+        const lowerMsg = userMsg.toLowerCase().trim();
+        // Exact match first
+        let match = brainData.find(d => d.user_message.toLowerCase() === lowerMsg);
+        if(match) return match.ai_response;
+        // Partial match
+        match = brainData.find(d => d.user_message.toLowerCase().includes(lowerMsg) || lowerMsg.includes(d.user_message.toLowerCase()));
+        if(match) return match.ai_response;
+        // Intent-based fallback
+        return "I am learning this pattern...";
+    }
+
+    // Chat
+    document.getElementById('chat-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const input = document.getElementById('chat-input');
+        const msg = input.value.trim();
+        if(!msg) return;
+        const container = document.getElementById('chat-messages');
+        container.innerHTML += `<div class="flex justify-end"><div class="bg-purple-600/30 border border-purple-500/30 rounded-xl rounded-tr-sm px-4 py-3 max-w-md text-sm">${msg}</div></div>`;
+        input.value = '';
+        container.innerHTML += `<div class="flex justify-start"><div class="glass rounded-xl rounded-tl-sm px-4 py-3 max-w-md text-sm opacity-50"><span class="text-cyan-300 text-xs font-medium block mb-1">AMRHZ AI</span>Thinking...</div></div>`;
+        container.scrollTop = container.scrollHeight;
+        logConsole('Intent detected: ' + msg.split(' ')[0].toLowerCase());
+        
+        // Trigger brain growth animation when message is saved
+        growBrainNetwork();
+        logConsole('Neural network growing... new synapses forming');
+        
+        setTimeout(() => {
+            const msgs = container.querySelectorAll('.justify-start');
+            const last = msgs[msgs.length-1]?.querySelector('div');
+            const response = findResponse(msg);
+            if(last) { last.classList.remove('opacity-50'); last.innerHTML = `<span class="text-cyan-300 text-xs font-medium block mb-1">AMRHZ AI</span>${response}`; }
+            container.scrollTop = container.scrollHeight;
+        }, 1500);
+    });
+
+    // Training simulation
+    function simulateTraining() {
+        const bar = document.getElementById('train-progress');
+        const status = document.getElementById('train-status');
+        const acc = document.getElementById('train-accuracy');
+        const logs = document.getElementById('train-logs');
+        bar.style.width = '0%'; status.textContent = 'Loading...';
+        logs.innerHTML += '<p>> Loading dataset...</p>';
+        logConsole('Training started...');
+        setTimeout(() => { bar.style.width = '40%'; status.textContent = 'Training...'; logs.innerHTML += '<p>> Training intent model...</p>'; }, 800);
+        setTimeout(() => { bar.style.width = '75%'; logs.innerHTML += '<p>> Epoch 2/3 complete</p>'; }, 1800);
+        setTimeout(() => { bar.style.width = '100%'; status.textContent = 'Complete'; acc.textContent = 'Accuracy: 96.1%'; logs.innerHTML += '<p>> Model ready ✓</p>'; logConsole('Training complete — accuracy 96.1%'); }, 2800);
+    }
+
+    // File upload simulation
+    function simulateUpload() {
+        const list = document.getElementById('file-list');
+        const names = ['intent_model.py','trainer.py','data_v3.csv','processing_files.py'];
+        const name = names[Math.floor(Math.random()*names.length)];
+        list.innerHTML += `<div class="glass rounded-lg p-3 flex items-center justify-between"><div class="flex items-center gap-3"><i data-lucide="file" style="width:16px;height:16px;color:#a78bfa"></i><span class="text-sm">${name}</span></div><span class="text-xs text-yellow-400">Processing...</span></div>`;
+        lucide.createIcons();
+        logConsole('Processing file: ' + name);
+        setTimeout(() => { const items = list.querySelectorAll('.text-yellow-400'); items.forEach(i => { i.textContent = 'Completed'; i.className = 'text-xs text-green-400'; }); }, 2000);
+    }
+
+    function clearFiles() { document.getElementById('file-list').innerHTML = ''; logConsole('File queue cleared'); }
+
+    // Console
+    function logConsole(msg) {
+        const c = document.getElementById('console-output');
+        const p = document.createElement('p');
+        p.className = 'console-line';
+        p.textContent = '> ' + msg;
+        c.appendChild(p);
+        c.scrollTop = c.scrollHeight;
+    }
+
+    // Brain network state - tracks neurons and synapses
+    let brainNetwork = {
+        inputNeurons: 5,
+        hiddenNeurons: 6,
+        outputNeurons: 1,
+        synapses: 15
+    };
+
+    // Calculate stats from complete brain data
+    function calculateMemoryStats() {
+        const uniqueIntentsSet = [...new Set(brainData.map(d => d.intent))];
+        const greetingCount = brainData.filter(d => d.intent === 'greeting').length;
+        const generalCount = brainData.filter(d => d.intent === 'general').length;
+        const totalCount = brainData.length;
+        const mediumPriority = brainData.filter(d => d.priority === 'medium').length;
+        const lowPriority = brainData.filter(d => d.priority === 'low').length;
+        const autoTagged = brainData.filter(d => d.context_tag === 'auto').length;
+        const socialTagged = brainData.filter(d => d.context_tag === 'social').length;
+        
+        return {
+            total: totalCount,
+            intents: uniqueIntentsSet.length,
+            confidence: (95 - (totalCount * 0.01)).toFixed(1),
+            greetings: greetingCount,
+            generals: generalCount,
+            medium: mediumPriority,
+            low: lowPriority,
+            auto: autoTagged,
+            social: socialTagged
+        };
+    }
+
+    // Update brain visualization with new neurons and synapses
+    function growBrainNetwork() {
+        brainNetwork.inputNeurons += 0.5;
+        brainNetwork.hiddenNeurons += 0.8;
+        brainNetwork.synapses += 2;
+        
+        updateBrainVisualization();
+    }
+
+    // Regenerate SVG with dynamic neuron and synapse counts
+    function updateBrainVisualization() {
+        const svg = document.querySelector('[viewBox="0 0 220 240"]');
+        if (!svg) return;
+        
+        const inputCount = Math.round(brainNetwork.inputNeurons);
+        const hiddenCount = Math.round(brainNetwork.hiddenNeurons);
+        const synapseCount = Math.round(brainNetwork.synapses);
+        
+        // Clear previous elements but keep SVG tag
+        svg.innerHTML = '';
+        
+        // Calculate positions
+        const inputY = 240 / (inputCount + 1);
+        const hiddenY = 240 / (hiddenCount + 1);
+        
+        // Generate synapses (input to hidden and hidden to output)
+        for (let i = 0; i < synapseCount; i++) {
+            const inputIdx = i % inputCount;
+            const hiddenIdx = i % hiddenCount;
+            const delay = (i % 15) * 0.2;
+            const inputPosY = (inputIdx + 1) * inputY;
+            const hiddenPosY = (hiddenIdx + 1) * hiddenY;
+            
+            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            path.setAttribute('d', `M 40 ${inputPosY} Q 70 ${(inputPosY + hiddenPosY) / 2} 130 ${hiddenPosY}`);
+            path.setAttribute('stroke', i % 2 === 0 ? '#8b5cf6' : '#06b6d4');
+            path.setAttribute('stroke-width', '1.5');
+            path.setAttribute('fill', 'none');
+            path.setAttribute('class', `synapse synapse-${(i % 15) + 1}`);
+            path.setAttribute('style', `animation-delay: ${delay}s`);
+            svg.appendChild(path);
+        }
+        
+        // Input neurons
+        for (let i = 0; i < inputCount; i++) {
+            const posY = (i + 1) * inputY;
+            const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            circle.setAttribute('cx', '40');
+            circle.setAttribute('cy', posY);
+            circle.setAttribute('r', '6');
+            circle.setAttribute('fill', '#8b5cf6');
+            circle.setAttribute('opacity', '0.8');
+            circle.setAttribute('class', `neuron neuron-${(i % 5) + 1}`);
+            svg.appendChild(circle);
+        }
+        
+        // Hidden neurons
+        for (let i = 0; i < hiddenCount; i++) {
+            const posY = (i + 1) * hiddenY;
+            const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            circle.setAttribute('cx', '110');
+            circle.setAttribute('cy', posY);
+            circle.setAttribute('r', '7');
+            circle.setAttribute('fill', i % 2 === 0 ? '#06b6d4' : '#0891b2');
+            circle.setAttribute('opacity', '0.85');
+            circle.setAttribute('class', `neuron neuron-${(i % 5) + 1}`);
+            svg.appendChild(circle);
+        }
+        
+        // Output neuron
+        const outputCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        outputCircle.setAttribute('cx', '110');
+        outputCircle.setAttribute('cy', '210');
+        outputCircle.setAttribute('r', '8');
+        outputCircle.setAttribute('fill', '#22c55e');
+        outputCircle.setAttribute('opacity', '0.9');
+        outputCircle.setAttribute('class', 'neuron neuron-1');
+        svg.appendChild(outputCircle);
+        
+        // Output glow
+        const glowCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        glowCircle.setAttribute('cx', '110');
+        glowCircle.setAttribute('cy', '210');
+        glowCircle.setAttribute('r', '12');
+        glowCircle.setAttribute('fill', 'none');
+        glowCircle.setAttribute('stroke', '#22c55e');
+        glowCircle.setAttribute('stroke-width', '1');
+        glowCircle.setAttribute('opacity', '0.3');
+        svg.appendChild(glowCircle);
+    }
+
+    // Update memory panel with stats on load
+    window.addEventListener('DOMContentLoaded', () => {
+        const stats = calculateMemoryStats();
+        
+        // Update stat boxes
+        document.getElementById('stat-total').textContent = stats.total;
+        document.getElementById('stat-intents').textContent = stats.intents;
+        document.getElementById('stat-confidence').textContent = stats.confidence + '%';
+        
+        // Update intent distribution
+        document.getElementById('intent-greeting-count').textContent = stats.greetings;
+        document.getElementById('intent-general-count').textContent = stats.generals;
+        const greetingPercent = (stats.greetings / stats.total * 100).toFixed(0);
+        const generalPercent = (stats.generals / stats.total * 100).toFixed(0);
+        document.getElementById('intent-greeting-bar').style.width = greetingPercent + '%';
+        document.getElementById('intent-general-bar').style.width = generalPercent + '%';
+        
+        // Update priority tags
+        const priorityTotal = stats.medium + stats.low;
+        const mediumPercent = (stats.medium / priorityTotal * 100).toFixed(0);
+        
+        // Update context tags
+        document.getElementById('tag-auto').textContent = stats.auto;
+        document.getElementById('tag-social').textContent = stats.social;
+        
+        // Log to console
+        logConsole(`Brain loaded: ${stats.total} entries, ${stats.intents} intents, confidence ${stats.confidence}%`);
+    });
+
+    renderTabs();
+</script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a0fb352675aba559',t:'MTc4MjEzMDgzMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+</body></html>
