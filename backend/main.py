@@ -33,3 +33,5 @@ def chat(prompt: str):
     store_memory(prompt, checked)
 
     return {"response": checked}
+    
+plan = pilot_agent(prompt, memory if memory else "no memory")
