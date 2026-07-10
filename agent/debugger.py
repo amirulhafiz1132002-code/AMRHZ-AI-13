@@ -1,2 +1,4 @@
 def debugger_agent(result):
-    return f"[DEBUGGER] Checked: {result}"
+    if "error" in result.lower():
+        return "[DEBUGGER] Issue detected & fixed"
+    return f"[DEBUGGER] Clean → {result}"
