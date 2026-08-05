@@ -1,0 +1,14 @@
+from agents.builder import run as builder_run
+from watcher.logger import log_event
+
+def orchestrate(task):
+    log_event("orchestrator_start", {"task": task})
+
+    result = builder_run(task)
+
+    log_event("orchestrator_end", {
+        "task": task,
+        "status": "done"
+    })
+
+    return result
