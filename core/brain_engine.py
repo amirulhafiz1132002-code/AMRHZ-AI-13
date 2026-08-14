@@ -1,4 +1,4 @@
-import csv
+import csv 
 from pathlib import Path
 
 BRAIN_FILE = Path(__file__).resolve().parent.parent / "data" / "brain_v2.csv"
