@@ -1,6 +1,7 @@
 import csv
+from pathlib import Path
 
-BRAIN_FILE = "data/brain_v2.csv"
+BRAIN_FILE = Path(__file__).resolve().parent.parent / "data" / "brain_v2.csv"
 
 def load_brain():
     data = []
