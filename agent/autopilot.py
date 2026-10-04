@@ -54,8 +54,12 @@ class AutoPilot:
             score = self.score_memory(row, intent, context_history)
             scored.append((row, score))
         
-        # Sort by score descending
-        scored.sort(key=lambda x: x[1], reverse=True)
+        # Deterministic semantic ranking: exact intent match takes precedence,
+        # then existing score semantics decide among matching candidates.
+        scored.sort(
+            key=lambda x: (x[0].get("intent") == intent, x[1]),
+            reverse=True,
+        )
         return scored[:top_n]
     
     def autopilot_loop(self, prompt: str, user_feedback_fn=None) -> Dict:
@@ -157,6 +161,13 @@ class AutoPilot:
         keyword_matches = sum(1 for word in prompt_lower.split() 
                              if len(word) > 3 and word in response)
         confidence += (keyword_matches * 0.1)
+
+        # Exact intent is an explicit semantic signal. Keep the global
+        # threshold unchanged while allowing a correct intent match to
+        # reach it when the response also matches the prompt keywords.
+        if row.get("intent") == self._detect_intent(prompt):
+            confidence += 0.1
+
         confidence = min(confidence, 1.0)
         
         return (row, score), confidence
