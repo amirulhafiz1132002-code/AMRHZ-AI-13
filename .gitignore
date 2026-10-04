@@ -32,3 +32,10 @@ google-services.json
 
 # Android Profiling
 *.hprof
+
+# Python generated cache
+__pycache__/
+*.pyc
+
+# Runtime-generated autopilot history
+data/autopilot_history.csv
