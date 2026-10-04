@@ -9,4 +9,5 @@ def chat():
     response = run_agent(data["message"])
     return jsonify({"response": response})
 
-app.run(port=5000)
+if __name__ == "__main__":
+    app.run(port=5000)
