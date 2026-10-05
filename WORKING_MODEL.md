@@ -78,3 +78,42 @@ REAL STATE
 ```
 
 The next implementation task is **AMRHZ Portable Runtime Layer v0.1**.
+
+
+## Portable Runtime Layer v0.1 — 2026-10-06
+
+Implementation branch: `portable-runtime-v0.1`
+
+The first portable-runtime layer now detects observed environment capabilities without importing or requiring the heavyweight model stack.
+
+### Implemented
+
+- `runtime/capabilities.py` — capability detection and conservative runtime status.
+- `scripts/capability_check.py` — JSON capability report.
+- `tests/test_capabilities.py` — regression coverage for READY vs environment-blocked states.
+
+### Verification evidence
+
+The capability module was executed in an isolated Python 3.13.5 / Linux x86_64 environment:
+
+- PyTorch: available
+- Transformers: unavailable
+- Tokenizers: unavailable
+- Result: **PARTIAL / ENVIRONMENT-BLOCKED**
+
+Regression tests: **2 passed**.
+
+This verifies the portable capability logic itself. It does **not** verify model inference.
+
+### Next boundary
+
+```
+Capability detection
+→ real target PC environment
+→ dependency installation
+→ model load
+→ inference smoke test
+→ SMOKE_TEST_PASS
+```
+
+No inference or LIVE claim is made from this checkpoint.
