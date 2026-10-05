@@ -4,9 +4,9 @@
 
 ## Status
 
-**Phase:** Blueprint / Architecture Definition  
-**State:** CONCEPT → PLANNED  
-**Implementation:** Not yet claimed as live  
+**Phase:** Working Model v0.1 / Portable Runtime Foundation  
+**State:** DEVELOPMENT / PARTIAL  
+**Implementation:** Real runtime code exists; overall model is not yet VERIFIED or LIVE  
 **Evidence rule:** Real state > UI simulation · Evidence > claim · Human intention > AI assumption
 
 This repository is the primary AMRHZ AI project record for the model direction, system architecture, provenance, evaluation strategy, and future implementation.
@@ -271,7 +271,48 @@ If runtime evidence does not exist, the system must not be presented as LIVE or 
 
 ---
 
-## 11. Current Checkpoint — 2026-10-06
+## 11. Cross-Device Runtime Strategy — LOCKED
+
+AMRHZ AI development must not become dependent on a single physical device.
+
+The locked strategy is:
+
+> **Build portable infrastructure on Android, but reserve heavyweight model execution for environments that genuinely support it.**
+
+The repository and verification protocol remain the common source of truth across devices.
+
+```
+AMRHZ CORE
+    ↓
+Environment Detection
+    ↓
+Capability Verification
+    ↓
+Select Supported Runtime
+    ↓
+Execute
+    ↓
+Verify
+    ↓
+Report REAL STATE
+```
+
+### Runtime roles
+
+| Environment | Role | Current boundary |
+|---|---|---|
+| Android / Termux | Portable infrastructure, environment checks, lightweight verification | Heavy model stack may be unavailable |
+| PC / full development environment | Full model runtime and heavier development | Required for current working-model inference when dependencies are available |
+| Repository | Common source of truth | Same code, protocol, and documented state |
+| Tests / evidence | Common verification layer | No VERIFIED/LIVE claim without runtime evidence |
+
+Android is therefore treated as a **runtime node**, not as a disposable fallback device.
+
+A device limitation is recorded as an environment boundary rather than hidden through unverified workarounds.
+
+---
+
+## 12. Current Checkpoint — 2026-10-06
 
 ### Blueprint work
 
@@ -287,13 +328,43 @@ If runtime evidence does not exist, the system must not be presented as LIVE or 
 
 ### Current maturity
 
-**CONCEPT / PLANNED**
+**DEVELOPMENT / PARTIAL**
 
-The architecture above is a design baseline. Implementation status must be established separately through actual repository, runtime, training, and evaluation evidence.
+The architecture remains the design baseline. The working-model branch now contains a real runtime implementation and smoke-test protocol, but the complete model runtime is not yet VERIFIED or LIVE.
+
+### Android verification evidence
+
+On Android / Termux / ARM64:
+
+- ✅ PyTorch 2.14.1 imports successfully on CPU.
+- ⚠️ Transformers is not currently installed.
+- ⚠️ No compatible PyPI binary wheel for the required `tokenizers` package was available for this Termux/Python/ARM64 environment.
+- ⚠️ Termux did not provide a native `tokenizers` package in the checked repository.
+- ⚠️ Source installation was blocked during Android API-level detection.
+- ❌ Real model inference has not been verified on this environment.
+
+Therefore the current state is:
+
+**PARTIAL / ENVIRONMENT-BLOCKED**
+
+This does not establish a model-code failure. It establishes a dependency/runtime compatibility boundary for the current Android environment.
 
 ### Next session
 
-Focus on **implementation of the AMRHZ AI blueprint**, proceeding one verified layer at a time.
+Continue with the locked portable-runtime strategy and proceed one verified layer at a time.
+
+Immediate order:
+
+```
+Portable Runtime Layer
+→ Environment Check
+→ Repository / Protocol Verification
+→ PC Environment Recovery
+→ Model Load
+→ Inference Smoke Test
+→ PASS
+→ AMRHZ Transformation
+```
 
 Recommended order:
 
@@ -312,7 +383,7 @@ No layer is considered complete merely because its UI, documentation, or configu
 
 ---
 
-## 12. Operating Principles
+## 13. Operating Principles
 
 ### ♾️ REAL STATE > UI SIMULATION
 
@@ -332,7 +403,7 @@ Development should progress through small, verifiable checkpoints.
 
 ---
 
-## 13. Long-Term Direction
+## 14. Long-Term Direction
 
 The long-term goal is an AMRHZ AI ecosystem that can incorporate new technologies without losing its architectural identity:
 
@@ -356,7 +427,7 @@ The system should therefore be **technology-adaptive without becoming architectu
 
 ---
 
-## 14. Project Identity
+## 15. Project Identity
 
 **AMRHZ AI**  
 **AMRHZ Architecture**  
@@ -376,5 +447,43 @@ AMRHZ-specific code, documentation, datasets, transformations, evaluations, and 
 
 ---
 
-**Checkpoint:** 2026-10-06 — AMRHZ AI conceptual blueprint complete.  
-**Next state:** Implementation planning and verified execution.
+**Checkpoint:** 2026-10-06 — AMRHZ AI blueprint + working-model + cross-device strategy documented.  
+**Next state:** Portable runtime implementation and verified execution.
+
+
+## Current Development Checkpoint — 2026-10-06
+
+### Portable Runtime Layer v0.1
+
+Branch: `portable-runtime-v0.1`
+
+A first real portable-runtime layer has been implemented:
+
+- `runtime/capabilities.py`
+- `scripts/capability_check.py`
+- `tests/test_capabilities.py`
+
+The layer reports the actual availability of PyTorch, Transformers, and Tokenizers and derives a conservative runtime state. It does not pretend that package presence alone proves model inference.
+
+### Verification
+
+Regression suite for the new capability layer: **2 passed**.
+
+An isolated execution environment reported:
+
+**PARTIAL / ENVIRONMENT-BLOCKED**
+
+because Transformers and Tokenizers were unavailable there, while PyTorch was available.
+
+This is verification of the capability-detection layer only. The working model remains **not VERIFIED** until the real target PC environment completes dependency installation, model loading, generation, and the existing `SMOKE_TEST_PASS`.
+
+### Development order
+
+```
+Portable Runtime
+→ PC Environment Recovery
+→ Model Load
+→ Inference Smoke Test
+→ PASS
+→ AMRHZ Transformation
+```
