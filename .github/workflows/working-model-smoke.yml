@@ -20,4 +20,4 @@ jobs:
       - name: Run model smoke test
         env:
           HF_HUB_DISABLE_TELEMETRY: "1"
-        run: python scripts/smoke_test.py
+        run: PYTHONPATH=. python scripts/smoke_test.py
