@@ -449,3 +449,41 @@ AMRHZ-specific code, documentation, datasets, transformations, evaluations, and 
 
 **Checkpoint:** 2026-10-06 — AMRHZ AI blueprint + working-model + cross-device strategy documented.  
 **Next state:** Portable runtime implementation and verified execution.
+
+
+## Current Development Checkpoint — 2026-10-06
+
+### Portable Runtime Layer v0.1
+
+Branch: `portable-runtime-v0.1`
+
+A first real portable-runtime layer has been implemented:
+
+- `runtime/capabilities.py`
+- `scripts/capability_check.py`
+- `tests/test_capabilities.py`
+
+The layer reports the actual availability of PyTorch, Transformers, and Tokenizers and derives a conservative runtime state. It does not pretend that package presence alone proves model inference.
+
+### Verification
+
+Regression suite for the new capability layer: **2 passed**.
+
+An isolated execution environment reported:
+
+**PARTIAL / ENVIRONMENT-BLOCKED**
+
+because Transformers and Tokenizers were unavailable there, while PyTorch was available.
+
+This is verification of the capability-detection layer only. The working model remains **not VERIFIED** until the real target PC environment completes dependency installation, model loading, generation, and the existing `SMOKE_TEST_PASS`.
+
+### Development order
+
+```
+Portable Runtime
+→ PC Environment Recovery
+→ Model Load
+→ Inference Smoke Test
+→ PASS
+→ AMRHZ Transformation
+```
