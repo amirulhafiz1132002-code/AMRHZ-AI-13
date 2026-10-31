@@ -41,7 +41,7 @@ class AutoPilot:
         
         memory_id = row.get("id")
         uses = sum(1 for h in history if h.get("memory_id") == memory_id)
-        successes = sum(1 for h in history if h.get("memory_id") == memory_id and h.get("success") == "true")
+        successes = sum(1 for h in history if h.get("memory_id") == memory_id and str(h.get("success", "")).strip().lower() == "true")
         
         return successes / uses if uses > 0 else 0.0
     
